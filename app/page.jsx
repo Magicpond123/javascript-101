@@ -337,12 +337,11 @@ const GachaMachine = () => {
         {prizeModalOpen && (
           <div
             style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
+              position: "absolute",
+              top: "-20%",
+              left: "-73%",
               width: "100%",
               height: "100%",
-              zIndex: 9999,
               pointerEvents: "none",
             }}
           >
