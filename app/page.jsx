@@ -113,7 +113,7 @@ const GachaMachine = () => {
     setCredit((prevCredit) => prevCredit + amount);
     setPrizeHistory((prevHistory) => {
       const newHistory = [
-        { name: "AddCredit " + amount},
+        { name: "AddCredit :" + amount},
         ...prevHistory,
       ];
       return newHistory.slice(0, 5);
