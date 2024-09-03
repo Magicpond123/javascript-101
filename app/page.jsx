@@ -1,8 +1,21 @@
-// 11. Add function for calculate stock and display
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardBody, CardHeader, CardFooter, Typography, Button, IconButton, List, ListItem, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
-import Confetti from 'react-confetti-boom';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Typography,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+import Confetti from "react-confetti-boom";
 
 const GachaMachine = () => {
   const initialProducts = [
@@ -10,7 +23,8 @@ const GachaMachine = () => {
       id: 1,
       name: "Toffee",
       desc: "THE MONSTERS - Tasty Macarons Vinyl Face",
-      image: "https://global-static.popmart.com/globalAdmin/1720611794669____%E5%BD%A2%E8%B1%A12____.png",
+      image:
+        "https://global-static.popmart.com/globalAdmin/1720611794669____%E5%BD%A2%E8%B1%A12____.png",
       price: 550,
       stock: 1,
     },
@@ -18,7 +32,8 @@ const GachaMachine = () => {
       id: 2,
       name: "Green Grape",
       desc: "THE MONSTERS - Tasty Macarons Vinyl Face",
-      image: "https://global-static.popmart.com/globalAdmin/1720611785753____%E5%BD%A2%E8%B1%A16____.png",
+      image:
+        "https://global-static.popmart.com/globalAdmin/1720611785753____%E5%BD%A2%E8%B1%A16____.png",
       price: 550,
       stock: 1,
     },
@@ -26,7 +41,8 @@ const GachaMachine = () => {
       id: 3,
       name: "Sea Salt Coconut",
       desc: "THE MONSTERS - Tasty Macarons Vinyl Face",
-      image: "https://global-static.popmart.com/globalAdmin/1720611777879____%E5%BD%A2%E8%B1%A11____.png",
+      image:
+        "https://global-static.popmart.com/globalAdmin/1720611777879____%E5%BD%A2%E8%B1%A11____.png",
       price: 550,
       stock: 1,
     },
@@ -34,7 +50,8 @@ const GachaMachine = () => {
       id: 4,
       name: "Sesame Bean",
       desc: "THE MONSTERS - Tasty Macarons Vinyl Face",
-      image: "https://global-static.popmart.com/globalAdmin/1720611767394____%E5%BD%A2%E8%B1%A14____.png",
+      image:
+        "https://global-static.popmart.com/globalAdmin/1720611767394____%E5%BD%A2%E8%B1%A14____.png",
       price: 550,
       stock: 1,
     },
@@ -42,7 +59,8 @@ const GachaMachine = () => {
       id: 5,
       name: "Soymilk",
       desc: "THE MONSTERS - Tasty Macarons Vinyl Face",
-      image: "https://global-static.popmart.com/globalAdmin/1720611756611____%E5%BD%A2%E8%B1%A13____.png",
+      image:
+        "https://global-static.popmart.com/globalAdmin/1720611756611____%E5%BD%A2%E8%B1%A13____.png",
       price: 550,
       stock: 1,
     },
@@ -50,37 +68,42 @@ const GachaMachine = () => {
       id: 6,
       name: "Lychee Berry",
       desc: "THE MONSTERS - Tasty Macarons Vinyl Face",
-      image: "https://global-static.popmart.com/globalAdmin/1720611748486____%E5%BD%A2%E8%B1%A15____.png",
+      image:
+        "https://global-static.popmart.com/globalAdmin/1720611748486____%E5%BD%A2%E8%B1%A15____.png",
       price: 550,
       stock: 1,
     },
   ];
 
   const [products, setProducts] = useState(initialProducts);
-  const [availableProducts, setAvailableProducts] = useState([])
-  const [message, setMessage] = useState('Please add your credit and click "PLAY GACHA"');
+  const [availableProducts, setAvailableProducts] = useState([]);
+  const [message, setMessage] = useState(
+    'Please add your credit and click "PLAY GACHA"'
+  );
   const [costPerRound, setCostPerRound] = useState(550);
   const [credit, setCredit] = useState(0);
   const [lastPrize, setLastPrize] = useState(null);
   const [prizeModalOpen, setPrizeModalOpen] = useState(false);
-  const [creditNotEnoughModalOpen, setCreditNotEnoughModalOpen] = useState(false);
+  const [creditNotEnoughModalOpen, setCreditNotEnoughModalOpen] =
+    useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
+  const [prizeHistory, setPrizeHistory] = useState([]);
 
   useEffect(() => {
     updateAvailableProducts();
   }, [products]);
 
-  function updateAvailableProducts () {
-    const available = products.filter(product => product.stock > 0);
+  function updateAvailableProducts() {
+    const available = products.filter((product) => product.stock > 0);
     setAvailableProducts(available);
   }
 
   function updateProductStock(productId) {
-    setProducts(prevProducts => 
-      prevProducts.map(product => 
-        product.id === productId 
-          ? { ...product, stock: product.stock - 1 } 
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId
+          ? { ...product, stock: product.stock - 1 }
           : product
       )
     );
@@ -88,6 +111,13 @@ const GachaMachine = () => {
 
   function handleClickAddCredit(amount) {
     setCredit((prevCredit) => prevCredit + amount);
+    setPrizeHistory((prevHistory) => {
+      const newHistory = [
+        { name: "AddCredit " + amount},
+        ...prevHistory,
+      ];
+      return newHistory.slice(0, 5);
+    });
   }
 
   function handleClickPlayGacha() {
@@ -108,7 +138,9 @@ const GachaMachine = () => {
       // Returns a random integer from 0 to 5:
       let randomNumber = Math.floor(Math.random() * availableProducts.length);
       // จะหาว่า availableProducts id นั้นเป็น index ที่เท่าไหร่ของ product ทั้งหมด
-      setHighlightedIndex(products.findIndex(p => p.id === availableProducts[randomNumber].id));
+      setHighlightedIndex(
+        products.findIndex((p) => p.id === availableProducts[randomNumber].id)
+      );
       round++;
       if (round >= 50) {
         clearInterval(intervalId);
@@ -117,12 +149,20 @@ const GachaMachine = () => {
         setPrizeModalOpen(true);
         setMessage(
           <>
-            <Typography variant="h6">Congraturation</Typography>
+            <Typography variant="h6">Congratulations</Typography>
             <Typography>You won: {randomProduct.name}</Typography>
           </>
         );
         updateProductStock(randomProduct.id);
         setIsPlaying(false);
+
+        setPrizeHistory((prevHistory) => {
+          const newHistory = [
+            { name: randomProduct.name, desc: randomProduct.desc },
+            ...prevHistory,
+          ];
+          return newHistory.slice(0, 5);
+        });
       }
     }, 100);
   }
@@ -138,7 +178,11 @@ const GachaMachine = () => {
               <CardHeader shadow={false} floated={false}>
                 <div className="flex items-center justify-between p-4">
                   <Typography variant="h4">Gacha Machine</Typography>
-                  <Button color="yellow" onClick={handleClickPlayGacha} disabled={isPlaying}>
+                  <Button
+                    color="yellow"
+                    onClick={handleClickPlayGacha}
+                    disabled={isPlaying}
+                  >
                     {isPlaying ? "Playing..." : "PLAY GACHA"}
                   </Button>
                 </div>
@@ -147,7 +191,14 @@ const GachaMachine = () => {
                 {/* Product Item */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {products.map((product, index) => (
-                    <Card key={index} className={`${highlightedIndex === index ? "ring-4 ring-yellow-500" : ""}`}>
+                    <Card
+                      key={index}
+                      className={`${
+                        highlightedIndex === index
+                          ? "ring-4 ring-yellow-500"
+                          : ""
+                      }`}
+                    >
                       <CardBody className="text-center">
                         <Typography variant="h5" className="mb-2 truncate">
                           {product?.name}
@@ -161,19 +212,20 @@ const GachaMachine = () => {
                         <Typography variant="h4" color="red">
                           ฿{product?.price}
                         </Typography>
-                        <Button 
-                          className="mt-2 text-xs" 
-                          fullWidth 
+                        <Button
+                          className="mt-2 text-xs"
+                          fullWidth
                           color={product.stock > 0 ? "green" : "red"}
                           disabled={!product.stock}
                         >
-                          {product.stock > 0 ? `In Stock: ${product.stock}` : "Out of Stock"}
+                          {product.stock > 0
+                            ? `In Stock: ${product.stock}`
+                            : "Out of Stock"}
                         </Button>
                       </CardBody>
                     </Card>
                   ))}
                 </div>
-
               </CardBody>
             </Card>
           </div>
@@ -194,7 +246,7 @@ const GachaMachine = () => {
               </CardBody>
             </Card>
 
-             {/* Add Credit */}
+            {/* Add Credit */}
             <Card className="mb-4">
               <CardHeader shadow={false} floated={false}>
                 <Typography variant="h4">Add Credit</Typography>
@@ -226,7 +278,30 @@ const GachaMachine = () => {
                 <Typography variant="h4">Message</Typography>
               </CardHeader>
               <CardBody>
-                <Typography className="text-center" as="div">{message}</Typography>
+                <Typography className="text-center" as="div">
+                  {message}
+                </Typography>
+              </CardBody>
+            </Card>
+
+            {/* History */}
+            <Card className="mb-4">
+              <CardHeader shadow={false} floated={false}>
+                <Typography variant="h4">History</Typography>
+              </CardHeader>
+              <CardBody>
+                <List>
+                  {prizeHistory.map((prize, index) => (
+                    <ListItem key={index} className="flex flex-col">
+                      <Typography variant="h6" className="text-sm font-bold">
+                        {prize.name}
+                      </Typography>
+                      <Typography className="text-xs text-gray-600">
+                        {prize.desc}
+                      </Typography>
+                    </ListItem>
+                  ))}
+                </List>
               </CardBody>
             </Card>
           </div>
@@ -234,7 +309,6 @@ const GachaMachine = () => {
       </div>
 
       {/* Prize Won Modal */}
-      
       <Dialog open={prizeModalOpen}>
         <DialogHeader>Congratulations!</DialogHeader>
         <DialogBody divider>
@@ -260,6 +334,30 @@ const GachaMachine = () => {
             Claim Prize
           </Button>
         </DialogFooter>
+        {prizeModalOpen && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 9999,
+              pointerEvents: "none",
+            }}
+          >
+            <Confetti
+              mode="fall"
+              particleCount={50}
+              colors={["#ff577f", "#ff884b"]}
+            />
+            <Confetti
+              mode="boom"
+              particleCount={50}
+              colors={["#ff577f", "#ff884b"]}
+            />
+          </div>
+        )}
       </Dialog>
 
       {/* Credit Not Enough Modal */}
@@ -276,12 +374,14 @@ const GachaMachine = () => {
           </Typography>
         </DialogBody>
         <DialogFooter>
-          <Button variant="gradient" onClick={() => setCreditNotEnoughModalOpen(false)}>
+          <Button
+            variant="gradient"
+            onClick={() => setCreditNotEnoughModalOpen(false)}
+          >
             <span>Add Credit</span>
           </Button>
         </DialogFooter>
       </Dialog>
-
     </div>
   );
 };
